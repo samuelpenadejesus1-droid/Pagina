@@ -1,0 +1,430 @@
+!DOCTYPE html
+html lang=es
+head
+  meta charset=UTF-8
+  meta name=viewport content=width=device-width, initial-scale=1.0, user-scalable=no
+  titleAgujero de cariño para Caseytitle
+  link href=httpsfonts.googleapis.comcss2family=Cormorant+Garamondital,wght@0,300;1,300;1,400&family=Quicksandwght@300;400;500;600&display=swap rel=stylesheet
+  style
+    {margin0;padding0;box-sizingborder-box;}
+    html,body{width100%;height100%;overflowhidden;background#000;font-family'Quicksand',sans-serif;}
+    canvas{displayblock;positionfixed;top0;left0;width100%;height100%;}
+
+     ── NUEVO MODAL ESTILO ROSA ── 
+    #modal{
+      positionfixed;inset0;z-index9999;
+      displayflex;justify-contentcenter;align-itemscenter;
+      background#F9B8D4;
+      transitionopacity 1s ease;
+    }
+    #modal.oculto{opacity0;pointer-eventsnone;}
+
+    .card{
+      background#fff;
+      border-radius28px;
+      padding26px 26px 30px;
+      widthmin(340px, 88vw);
+      displayflex;flex-directioncolumn;align-itemscenter;gap0;
+      box-shadow0 6px 32px rgba(220,80,130,0.13);
+    }
+
+    .card-img-wrap{
+      width100%;border-radius14px;overflowhidden;
+      bordernone;
+      margin-bottom22px;
+      aspect-ratio43;
+      background#0a0015;
+      positionrelative;
+    }
+    .card-img-wrap img{
+      width100%;height100%;object-fitcover;displayblock;border-radius14px;
+    }
+
+    .card-quote{
+      font-family'Cormorant Garamond',serif;font-styleitalic;font-weight400;
+      font-sizeclamp(1.15rem,4.5vw,1.35rem);
+      color#1a1a2e;text-aligncenter;line-height1.45;
+      margin-bottom10px;
+    }
+    .card-sub{
+      font-size0.62rem;font-weight600;letter-spacing5px;text-transformuppercase;
+      colorrgba(180,80,140,0.55);margin-bottom26px;
+    }
+
+    #btn-entrar{
+      width100%;
+      font-family'Quicksand',sans-serif;font-size0.74rem;font-weight600;
+      letter-spacing4px;text-transformuppercase;
+      padding1rem 0;
+      background#fff;
+      color#E0306A;
+      border1.5px solid #E0306A;
+      border-radius50px;
+      cursorpointer;
+      transitionall 0.3s ease;
+      displayflex;align-itemscenter;justify-contentcenter;gap10px;
+    }
+    #btn-entrarhover{background#fdf0f4;}
+    #btn-entrar .heart{font-size0.9rem;}
+
+    .top-text{
+      positionfixed;top5%;left50%;transformtranslateX(-50%);
+      font-family'Cormorant Garamond',serif;font-styleitalic;
+      font-sizeclamp(1.1rem,3.5vw,1.9rem);
+      colorrgba(255,210,235,0.82);z-index10;pointer-eventsnone;white-spacenowrap;
+      text-shadow0 0 28px rgba(255,100,180,0.45);displaynone;
+    }
+    #hint{positionfixed;bottom18px;left50%;transformtranslateX(-50%);font-size0.62rem;letter-spacing3px;text-transformuppercase;colorrgba(255,180,220,0.25);pointer-eventsnone;z-index10;displaynone;}
+  style
+head
+body
+
+div id=modal
+  div class=card
+    div class=card-img-wrap
+      img src=CUsersUserDownloadsSaha entre estrellas y sueños.png alt=Galaxia onerror=this.src='CUsersUserDownloadsSaha entre estrellas y sueños.png'
+    div
+    div class=card-quotePara una personita muy espacial que esta de fiesta hoy! 🪐div
+    div class=card-subUn universo · solo para tidiv
+    button id=btn-entrar
+      span class=heart♡span Toca aquí, Niña span class=heart♡span
+    button
+  div
+div
+
+div class=top-text id=top-text ♡div
+div id=hintdiv
+canvas id=galaxycanvas
+
+audio id=musica loop
+  source src=CUsersUserDownloadsMusica para casey.mp3 type=audiompeg
+audio
+
+
+
+
+script
+document.getElementById('btn-entrar').addEventListener('click',()={
+  const m=document.getElementById('modal');
+  m.classList.add('oculto');
+  setTimeout(()=m.style.display='none',1000);
+  document.getElementById('top-text').style.display='block';
+  const isMobile=MobiAndroidiPhoneiPadi.test(navigator.userAgent);
+  if(isMobile)document.getElementById('hint').style.display='block';
+  const a=document.getElementById('musica');a.currentTime=16;a.play().catch(()={});
+});
+script
+
+script type=importmap
+{imports{
+  threehttpscdn.jsdelivr.netnpmthree@0.160.0buildthree.module.js,
+  threeaddonshttpscdn.jsdelivr.netnpmthree@0.160.0examplesjsm
+}}
+script
+
+script type=module
+import  as THREE from 'three';
+import { OrbitControls } from 'threeaddonscontrolsOrbitControls.js';
+import { EffectComposer } from 'threeaddonspostprocessingEffectComposer.js';
+import { RenderPass } from 'threeaddonspostprocessingRenderPass.js';
+import { UnrealBloomPass } from 'threeaddonspostprocessingUnrealBloomPass.js';
+
+const isMobile=MobiAndroidiPhoneiPadi.test(navigator.userAgent);
+
+const renderer=new THREE.WebGLRenderer({
+  canvasdocument.getElementById('galaxy'),
+  antialias!isMobile,alphatrue,powerPreference'high-performance'
+});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,isMobile1.52));
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=0.90;
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(60,innerWidthinnerHeight,0.1,200000);
+camera.position.set(0,isMobile180200,isMobile1100700);
+
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;controls.dampingFactor=0.055;
+controls.minDistance=60;
+controls.maxDistance=Infinity;
+controls.zoomSpeed=isMobile1.41.1;
+controls.rotateSpeed=isMobile0.550.9;
+controls.enablePan=false;
+controls.minPolarAngle=Math.PI0.2;
+controls.maxPolarAngle=Math.PI0.8;
+controls.touches={ONETHREE.TOUCH.ROTATE,TWOTHREE.TOUCH.DOLLY_PAN};
+
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene,camera));
+const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight));
+bloom.threshold=0.65;bloom.strength=0.42;bloom.radius=0.30;
+composer.addPass(bloom);
+
+const col=new THREE.Color();
+
+(function(){
+  const n=isMobile12002500;
+  const pos=new Float32Array(n3),color=new Float32Array(n3);
+  for(let i=0;in;i++){
+    const i3=i3;
+    const theta=Math.random()Math.PI2;
+    const phi=Math.acos(2Math.random()-1);
+    const r=12000+Math.random()60000;
+    pos[i3]  =rMath.sin(phi)Math.cos(theta);
+    pos[i3+1]=rMath.sin(phi)Math.sin(theta);
+    pos[i3+2]=rMath.cos(phi);
+    const t=Math.random();
+    if(t0.55) col.setHSL(0.08,0.05,0.90+Math.random()0.10);
+    else       col.setHSL(0.0,0.0,0.95);
+    color[i3]=col.r;color[i3+1]=col.g;color[i3+2]=col.b;
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.setAttribute('color',new THREE.BufferAttribute(color,3));
+  scene.add(new THREE.Points(g,new THREE.PointsMaterial({
+    sizeisMobile1.82.4,vertexColorstrue,
+    blendingTHREE.AdditiveBlending,transparenttrue,opacity0.65,depthWritefalse
+  })));
+})();
+
+
+
+let galaxyMesh,armsMesh;
+(function(){
+  const n=isMobile3500065000;
+  const pos=new Float32Array(n3),color=new Float32Array(n3);
+  const ARMS=5,SPIN=4.5,SPREAD=0.38,H=55;
+  for(let i=0;in;i++){
+    const i3=i3;
+    const arm=i%ARMS;
+    const t=Math.pow(Math.random(),0.55);
+    const rad=60+t980;
+    const baseAng=(armARMS)Math.PI2;
+    const spinAng=tSPIN;
+    const scatter=(Math.random()-.5)SPREAD(1+t1.5);
+    pos[i3]  =Math.cos(baseAng+spinAng+scatter)rad;
+    pos[i3+1]=(Math.random()-.5)HMath.exp(-rad500);
+    pos[i3+2]=Math.sin(baseAng+spinAng+scatter)rad;
+    const nt=rad1050;
+    if(nt0.1)       col.setHSL(0.05,0.15,0.96);
+    else if(nt0.3)  col.setHSL(0.93+Math.random()0.04,0.80,0.78+Math.random()0.12);
+    else if(nt0.6)  col.setHSL(0.95+Math.random()0.04,0.85,0.62+Math.random()0.15);
+    else             col.setHSL(0.88+Math.random()0.06,0.90,0.48+Math.random()0.18);
+    color[i3]=col.r;color[i3+1]=col.g;color[i3+2]=col.b;
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.setAttribute('color',new THREE.BufferAttribute(color,3));
+  galaxyMesh=new THREE.Points(g,new THREE.PointsMaterial({
+    sizeisMobile1.62.1,vertexColorstrue,
+    blendingTHREE.AdditiveBlending,transparenttrue,depthWritefalse,opacity0.92
+  }));
+  scene.add(galaxyMesh);
+})();
+
+(function(){
+  const n=isMobile600011000;
+  const pos=new Float32Array(n3),color=new Float32Array(n3);
+  for(let i=0;in;i++){
+    const i3=i3,t=in,arm=i%5,base=(arm5)Math.PI2;
+    const r=70+t960,ang=base+tMath.PI4.2;
+    pos[i3]=Math.cos(ang)r;pos[i3+1]=(Math.random()-.5)10;pos[i3+2]=Math.sin(ang)r;
+    col.setHSL(0.94+Math.random()0.04,0.25,0.92+Math.random()0.08);
+    color[i3]=col.r;color[i3+1]=col.g;color[i3+2]=col.b;
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.setAttribute('color',new THREE.BufferAttribute(color,3));
+  armsMesh=new THREE.Points(g,new THREE.PointsMaterial({
+    sizeisMobile2.53.2,vertexColorstrue,
+    blendingTHREE.AdditiveBlending,transparenttrue,depthWritefalse
+  }));
+  scene.add(armsMesh);
+})();
+
+scene.add(new THREE.Mesh(new THREE.SphereGeometry(42,64,64),new THREE.MeshBasicMaterial({color0x000000})));
+
+const haloMat=new THREE.ShaderMaterial({
+  uniforms{uTime{value0}},
+  vertexShader`varying vec3 vN;void main(){vN=normalize(normalMatrixnormal);gl_Position=projectionMatrixmodelViewMatrixvec4(position,1.);}`,
+  fragmentShader`uniform float uTime;varying vec3 vN;
+    void main(){
+      float rim=1.-max(dot(vN,vec3(0,0,1)),0.);
+      rim=pow(rim,3.0);float p=0.78+0.18sin(uTime1.8);
+      vec3 c=mix(vec3(.28,.0,.12),vec3(.95,.28,.62),rim)rimp;
+      gl_FragColor=vec4(c,rim0.48);
+    }`,
+  transparenttrue,sideTHREE.FrontSide,depthWritefalse,blendingTHREE.AdditiveBlending
+});
+scene.add(new THREE.Mesh(new THREE.SphereGeometry(53,64,64),haloMat));
+
+function mkDisk(inner,outer,c1,c2,c3,op,rx){
+  const mat=new THREE.ShaderMaterial({
+    uniforms{uTime{value0},uIn{valueinner},uOut{valueouter},
+      uC1{valuenew THREE.Color(c1)},uC2{valuenew THREE.Color(c2)},uC3{valuenew THREE.Color(c3)}},
+    vertexShader`varying vec3 vP;void main(){vP=position;gl_Position=projectionMatrixmodelViewMatrixvec4(position,1.);}`,
+    fragmentShader`uniform float uTime,uIn,uOut;uniform vec3 uC1,uC2,uC3;varying vec3 vP;
+      float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))43758.5453);}
+      void main(){
+        float r=length(vP.xy);float t=clamp((r-uIn)(uOut-uIn),0.,1.);
+        vec3 c=t.4mix(uC1,uC2,t.4)mix(uC2,uC3,(t-.4).6);
+        float ang=atan(vP.y,vP.x);float sw=h(vec2(r.1,ang+uTime.25)).22;
+        float glow=(1.-t)(1.-t)1.1+sw.25;
+        float a=(1.-t)(1.-tt)${op.toFixed(2)}+sw.08;
+        gl_FragColor=vec4(cglow,clamp(a,0.,1.));
+      }`,
+    sideTHREE.DoubleSide,transparenttrue,blendingTHREE.AdditiveBlending,depthWritefalse
+  });
+  const m=new THREE.Mesh(new THREE.RingGeometry(inner,outer,256,8),mat);
+  m.rotation.x=rx;scene.add(m);return mat;
+}
+const dM1=mkDisk(48,165,'#FFFFFF','#FFB8D8','#880044',0.60,Math.PI2);
+const dM2=mkDisk(56,132,'#FFD6E8','#E8508A','#3D001A',0.32,Math.PI2+0.13);
+const dM3=mkDisk(165,295,'#FF8CB8','#AA0050','#000000',0.16,Math.PI2);
+
+function mkJet(dir){
+  const mat=new THREE.ShaderMaterial({
+    uniforms{uTime{value0}},
+    vertexShader`varying vec2 vU;void main(){vU=uv;gl_Position=projectionMatrixmodelViewMatrixvec4(position,1.);}`,
+    fragmentShader`uniform float uTime;varying vec2 vU;
+      void main(){
+        float f=pow(1.-vU.y,2.)(1.-vU.x2.);float p=.6+.28sin(uTime3.8+vU.y9.);
+        vec3 c=mix(vec3(1.,.72,.88),vec3(.72,.0,.38),vU.y);
+        gl_FragColor=vec4(cp,f0.32);
+      }`,
+    transparenttrue,sideTHREE.DoubleSide,blendingTHREE.AdditiveBlending,depthWritefalse
+  });
+  const m=new THREE.Mesh(new THREE.ConeGeometry(8,225,32,1,true),mat);
+  m.position.y=dir112;m.rotation.x=dir00Math.PI;scene.add(m);return mat;
+}
+const jM1=mkJet(1),jM2=mkJet(-1);
+
+const pN=300;
+const pGeo=new THREE.BufferGeometry(),pBuf=new Float32Array(pN3),pA=[],pR=[];
+for(let i=0;ipN;i++){
+  const a=Math.random()Math.PI2,r=52+Math.random()210;
+  pA.push(a);pR.push(r);
+  pBuf[i3]=Math.cos(a)r;pBuf[i3+1]=(Math.random()-.5)7;pBuf[i3+2]=Math.sin(a)r;
+}
+pGeo.setAttribute('position',new THREE.BufferAttribute(pBuf,3));
+const diskPts=new THREE.Points(pGeo,new THREE.PointsMaterial({color0xFFB0D0,size2.0,transparenttrue,opacity0.85,blendingTHREE.AdditiveBlending,depthWritefalse}));
+scene.add(diskPts);
+
+function hXY(t){return{x16Math.pow(Math.sin(t),3),y13Math.cos(t)-5Math.cos(2t)-2Math.cos(3t)-Math.cos(4t)};}
+const hN=isMobile50008000,hP=new Float32Array(hN3),hC=new Float32Array(hN3);
+for(let i=0;ihN;i++){
+  const i3=i3,t=Math.random()Math.PI2,s=0.45+Math.random()0.55,p=hXY(t);
+  hP[i3]=p.xs3.8;hP[i3+1]=p.ys3.8;hP[i3+2]=(Math.random()-.5)12;
+  const d=Math.sqrt(p.xp.x+p.yp.y)22;
+  const hue=0.94-d0.04;
+  const lig=d0.250.90-d0.550.62-d0.05;
+  col.setHSL(hue,0.95,Math.max(lig,0.40));
+  hC[i3]=col.r;hC[i3+1]=col.g;hC[i3+2]=col.b;
+}
+const hGeo=new THREE.BufferGeometry();
+hGeo.setAttribute('position',new THREE.BufferAttribute(hP,3));
+hGeo.setAttribute('color',new THREE.BufferAttribute(hC,3));
+const heart=new THREE.Points(hGeo,new THREE.PointsMaterial({
+  sizeisMobile2.12.6,vertexColorstrue,
+  blendingTHREE.NormalBlending,transparenttrue,depthWritefalse,opacity0.97
+}));
+heart.position.y=isMobile100135;scene.add(heart);
+
+const phrases=[
+  Felicidades,Niña,Batatica,Eres muy especial,Te deseo lo mejor,
+  Risitos,Estrellita,Preciosa,Pequeñita,Consentida,
+  La nocturnita,Eres luz,Tontita ),Pequeñita,Felicidades,
+  Te deseo lo mejor,Niña,Eres increible,Tienes buenos valores,Qué bonita eres,
+  Eres Luz,Chiquitita,Batatica,Señorita,Sasha te desea lo mejor,
+  Estrellita,Sasha me envio ),Eres muy espacial,Con mucho cariño!,Casey
+];
+const sC=[
+  {fill'#FF69B4',sh'#C2185B'},
+  {fill'#FF1493',sh'#880E4F'},
+  {fill'#FFB6C1',sh'#E91E8C'},
+  {fill'#FFFFFF',sh'#E91E8C'},
+  {fill'#FFD6EC',sh'#C2185B'},
+  {fill'#FF85C2',sh'#AD1457'},
+];
+function mkSpr(txt,cd){
+  const cv=document.createElement('canvas');cv.width=1100;cv.height=240;
+  const cx=cv.getContext('2d');
+  cx.font=bold 105px 'Quicksand',sans-serif;
+   Contorno negro para legibilidad sobre cualquier fondo
+  cx.strokeStyle='rgba(0,0,0,0.55)';cx.lineWidth=8;cx.lineJoin='round';
+  cx.strokeText(txt,550,122);
+   Sombra rosa
+  cx.shadowColor=cd.sh;cx.shadowBlur=28;
+  cx.fillStyle=cd.fill;cx.textAlign='center';cx.textBaseline='middle';
+  cx.fillText(txt,550,122);
+  cx.shadowBlur=10;
+  cx.fillText(txt,550,122);
+  return new THREE.Sprite(new THREE.SpriteMaterial({mapnew THREE.CanvasTexture(cv),transparenttrue,blendingTHREE.NormalBlending,depthWritefalse}));
+}
+const tGrp=new THREE.Group();scene.add(tGrp);const sMs=[];
+ Escala adaptada móvil más grande para que se vea bien en pantalla pequeña
+const sprW=isMobile170145, sprH=isMobile3933;
+for(let i=0;i80;i++){
+  const cd=sC[i%sC.length],sp=mkSpr(phrases[i%phrases.length],cd);
+  const arm=i%5,base=(arm5)Math.PI2,t2=i80;
+  const r=160+t2820,ang=base+t2Math.PI4.2;
+   En móvil achatar la distribución vertical para que quepa en pantalla
+  const ySpread=isMobile55110;
+  sp.position.set(Math.cos(ang)r,(Math.random()-.5)ySpread,Math.sin(ang)r);
+  sp.scale.set(sprW,sprH,1);sp.material.opacity=0.0;tGrp.add(sp);sMs.push(sp.material);
+}
+
+const emojis=['💖','🎉','🎈','🌷','🌺','🎊','✨','💫','🌹','🧁'];
+const eGrp=new THREE.Group();scene.add(eGrp);
+function mkEmoji(e){
+  const cv=document.createElement('canvas');cv.width=256;cv.height=256;
+  const cx=cv.getContext('2d');
+  cx.font=195px 'Segoe UI Emoji','Apple Color Emoji',sans-serif;
+  cx.textAlign='center';cx.textBaseline='middle';cx.fillText(e,128,150);
+  const t=new THREE.CanvasTexture(cv);t.colorSpace=THREE.SRGBColorSpace;
+  return new THREE.Mesh(new THREE.PlaneGeometry(52,52),new THREE.MeshBasicMaterial({mapt,transparenttrue,alphaTest.04,depthWritefalse}));
+}
+for(let i=0;i24;i++){
+  const m=mkEmoji(emojis[i%emojis.length]);
+  const a=i24Math.PI2,r=195+Math.random()620;
+  m.position.set(Math.cos(a)r,(Math.random()-.5)115,Math.sin(a)r);eGrp.add(m);
+}
+
+scene.add(new THREE.AmbientLight(0xFFE8F8,0.28));
+const pl=new THREE.PointLight(0xFF70B0,2.8,430);scene.add(pl);
+
+window.addEventListener('resize',()={
+  camera.aspect=innerWidthinnerHeight;camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
+});
+
+const clock=new THREE.Clock();
+function loop(){
+  requestAnimationFrame(loop);
+  const t=clock.getElapsedTime();
+  galaxyMesh.rotation.y=t0.022;
+  armsMesh.rotation.y=t0.022;
+  tGrp.rotation.y=t0.016;
+  eGrp.rotation.y=t0.010;
+  eGrp.children.forEach(m=m.lookAt(camera.position));
+  heart.rotation.y+=0.0035;
+  heart.position.y=(isMobile100135)+Math.sin(t1.7)7;
+  const pa=diskPts.geometry.attributes.position.array;
+  for(let i=0;ipN;i++){
+    const sp=0.28+pR[i].00085,ang=pA[i]+tsp;
+    pa[i3]=Math.cos(ang)pR[i];pa[i3+2]=Math.sin(ang)pR[i];
+  }
+  diskPts.geometry.attributes.position.needsUpdate=true;
+  haloMat.uniforms.uTime.value=t;
+  dM1.uniforms.uTime.value=t;dM2.uniforms.uTime.value=t;dM3.uniforms.uTime.value=t;
+  jM1.uniforms.uTime.value=t;jM2.uniforms.uTime.value=t;
+  sMs.forEach((m,i)={const tgt=0.88+Math.sin(t1.4+i)0.10;m.opacity=THREE.MathUtils.lerp(m.opacity,tgt,.022);});
+  pl.intensity=2.5+Math.sin(t2.8).55;
+  controls.update();
+  composer.render();
+}
+loop();
+script
+body
+html
